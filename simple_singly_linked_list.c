@@ -121,8 +121,7 @@ bool list_contains(IntList list, int value)
    IntListNode current = list->head;
    while (current != 0)
    {
-      if (current->data == value)
-      {
+      if (current->data == value) {
          return true;
       }
 
@@ -134,8 +133,7 @@ bool list_contains(IntList list, int value)
 
 int list_get_at(IntList list, unsigned int index)
 {
-   if (!list_is_valid(list) || list_is_empty(list))
-   {
+   if (!list_is_valid(list) || list_is_empty(list)) {
       return 0;
    }
 
@@ -143,8 +141,7 @@ int list_get_at(IntList list, unsigned int index)
    IntListNode current = list->head;
    while (current != 0)
    {
-      if (i == index)
-      {
+      if (i == index) {
          return current->data;
       }
       current = current->next;
@@ -156,19 +153,16 @@ int list_get_at(IntList list, unsigned int index)
 
 void list_insert(IntList list, int value)
 {
-   if (list_is_valid(list))
-   {
+   if (list_is_valid(list)){
       IntListNode newNode = list_obtain_node(value);
 
-      if (list_is_empty(list))
-      {
+      if (list_is_empty(list)){
          list->head = newNode;
          return;
       }
 
       IntListNode current = list->head;
-      while (current->next != 0)
-      {
+      while (current->next != 0){
          current = current->next;
       }
 
@@ -178,21 +172,18 @@ void list_insert(IntList list, int value)
 
 void list_insert_at(IntList list, unsigned int index, int value)
 {
-   if (!list_is_valid(list))
-   {
+   if (!list_is_valid(list)){
       return;
    }
 
    IntListNode newNode = list_obtain_node(value);
 
-   if (list_is_empty(list))
-   {
+   if (list_is_empty(list)) {
       list->head = newNode;
       return;
    }
 
-   if (index == 0)
-   {
+   if (index == 0){
       newNode->next = list->head;
       list->head = newNode;
       return;
@@ -202,8 +193,7 @@ void list_insert_at(IntList list, unsigned int index, int value)
    IntListNode current = list->head;
    IntListNode previous = 0;
 
-   while (current != 0 && i < index)
-   {
+   while (current != 0 && i < index){
       previous = current;
       current = current->next;
       i++;
@@ -215,19 +205,16 @@ void list_insert_at(IntList list, unsigned int index, int value)
 
 void list_append(IntList list, IntList list_to_append)
 {
-   if (!list_is_valid(list_to_append) || list_is_empty(list_to_append))
-      {
+   if (!list_is_valid(list_to_append) || list_is_empty(list_to_append)){
          return;
       }
 
    if (list_is_empty(list)) {
       list->head = list_to_append->head;
    }
-   else
-   {
+   else{
       IntListNode current = list->head;
-      while (current->next != 0)
-      {
+      while (current->next != 0){
          current = current->next;
       }
 
@@ -239,13 +226,11 @@ void list_append(IntList list, IntList list_to_append)
 
 void list_remove(IntList list, int value)
 {
-   if (!list_is_valid(list) || list_is_empty(list))
-   {
+   if (!list_is_valid(list) || list_is_empty(list)){
       return;
    }
 
-   if (list->head->data == value)
-   {
+   if (list->head->data == value){
       IntListNode old_head = list->head;
       list->head = list->head->next;
       list_release_node(old_head);
@@ -253,10 +238,8 @@ void list_remove(IntList list, int value)
    }
 
    IntListNode current = list->head;
-   while (current->next != 0)
-   {
-      if (current->next->data == value)
-      {
+   while (current->next != 0){
+      if (current->next->data == value){
          IntListNode to_remove = current->next;
          current->next = to_remove->next;
          list_release_node(to_remove);
@@ -268,34 +251,27 @@ void list_remove(IntList list, int value)
 
 void list_remove_all(IntList list, int value)
 {
-   if (!list_is_valid(list) || list_is_empty(list))
-   {
+   if (!list_is_valid(list) || list_is_empty(list)){
       return;
    }
 
-   while (list->head != 0 && list->head->data == value)
-   {
+   while (list->head != 0 && list->head->data == value){
       IntListNode old_head = list->head;
       list->head = list->head->next;
       list_release_node(old_head);
    }
 
-   if (list_is_empty(list))
-   {
+   if (list_is_empty(list)){
       return;
    }
 
    IntListNode current = list->head;
-   while (current->next != 0)
-   {
-      if (current->next->data == value)
-      {
+   while (current->next != 0){
+      if (current->next->data == value){
          IntListNode to_remove = current->next;
          current->next = to_remove->next;
          list_release_node(to_remove);
-      }
-      else
-      {
+      }else{
          current = current->next;
       }
    }
@@ -303,13 +279,11 @@ void list_remove_all(IntList list, int value)
 
 int list_remove_at(IntList list, unsigned int index)
 {
-   if (!list_is_valid(list) || list_is_empty(list))
-   {
+   if (!list_is_valid(list) || list_is_empty(list)){
       return 0;
    }
 
-   if (index == 0)
-   {
+   if (index == 0){
       int value = list->head->data;
       IntListNode old_head = list->head;
       list->head = list->head->next;
@@ -321,15 +295,13 @@ int list_remove_at(IntList list, unsigned int index)
    IntListNode current = list->head;
    IntListNode previous = 0;
 
-   while (current != 0 && i < index)
-   {
+   while (current != 0 && i < index){
       previous = current;
       current = current->next;
       i++;
    }
 
-   if (current == 0)
-   {
+   if (current == 0){
       return 0;
    }
 
@@ -341,14 +313,12 @@ int list_remove_at(IntList list, unsigned int index)
 
 void list_clear(IntList list)
 {
-   if (!list_is_valid(list) || list_is_empty(list))
-   {
+   if (!list_is_valid(list) || list_is_empty(list)){
       return;
    }
 
    IntListNode current = list->head;
-   while (current != 0)
-   {
+   while (current != 0){
       IntListNode next = current->next;
       list_release_node(current);
       current = next;
