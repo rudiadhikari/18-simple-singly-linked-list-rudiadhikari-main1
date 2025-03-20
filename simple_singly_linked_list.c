@@ -90,20 +90,17 @@ bool list_is_empty(IntList list)
 
 int list_get_size(IntList list)
 {
-   if (!list_is_valid(list))
-   {
+   if (!list_is_valid(list)){
       return 0;
    }
 
-   if (list_is_empty(list))
-   {
+   if (list_is_empty(list)){
       return 0;
    }
 
    int size = 0;
    IntListNode current = list->head;
-   while (current != 0)
-   {
+   while (current != 0){
       size++;
       current = current->next;
    }
