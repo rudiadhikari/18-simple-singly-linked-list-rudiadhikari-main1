@@ -16,13 +16,5 @@
 
 #include "list.h"
 
-/** 
- * This header file maps only the common 'list' interface
- * into naming conventions for simple singly linked list implementation.
- * 
- * It does (for now) not extend or alter the function prototypes of the
- * common interface.
- *
- */
 
 #endif

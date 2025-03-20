@@ -1,0 +1,224 @@
+#include "simple_singly_linked_list.h"
+#include "allocator.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+/** The type of list nodes */
+typedef struct ListNode {
+    int value;
+    struct ListNode* next;
+} ListNode;
+
+/** The implementation of list data */
+typedef struct IntListData {
+    ListNode* head;
+    int size;
+} IntListData;
+
+/* ===================================================================== */
+/* private list functions */
+
+/* Allocate memory for a new list node */
+static ListNode* list_obtain_node(int value) {
+    ListNode* node = (ListNode*)alloc_mem(sizeof(ListNode));
+    if (node != NULL) {
+        node->value = value;
+        node->next = NULL;
+    }
+    return node;
+}
+
+/* Free memory for a list node */
+static void list_release_node(ListNode* node) {
+    if (node != NULL) {
+        free_mem(node);
+    }
+}
+
+/* ===================================================================== */
+/* public list functions */
+
+IntList list_obtain() {
+    IntList list = (IntList)alloc_mem(sizeof(IntListData));
+    if (list != NULL) {
+        list->head = NULL;
+        list->size = 0;
+    }
+    return list;
+}
+
+void list_release(IntList* p_list) {
+    if (p_list != NULL && *p_list != NULL) {
+        list_clear(*p_list);
+        free_mem(*p_list);
+        *p_list = NULL;
+    }
+}
+
+bool list_is_valid(IntList list) {
+    return list != NULL;
+}
+
+bool list_is_empty(IntList list) {
+    return list == NULL || list->size == 0;
+}
+
+int list_get_size(IntList list) {
+    return list != NULL ? list->size : 0;
+}
+
+bool list_contains(IntList list, int value) {
+    if (list == NULL) return false;
+    ListNode* current = list->head;
+    while (current != NULL) {
+        if (current->value == value) {
+            return true;
+        }
+        current = current->next;
+    }
+    return false;
+}
+
+int list_get_at(IntList list, unsigned int index) {
+    if (list == NULL || index >= list->size) return 0;
+    ListNode* current = list->head;
+    for (unsigned int i = 0; i < index; i++) {
+        current = current->next;
+    }
+    return current->value;
+}
+
+void list_insert(IntList list, int value) {
+    if (list == NULL) return;
+    ListNode* new_node = list_obtain_node(value);
+    if (new_node == NULL) return;
+
+    if (list->head == NULL) {
+        list->head = new_node;
+    } else {
+        ListNode* current = list->head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = new_node;
+    }
+    list->size++;
+}
+
+void list_insert_at(IntList list, unsigned int index, int value) {
+    if (list == NULL) return;
+    ListNode* new_node = list_obtain_node(value);
+    if (new_node == NULL) return;
+
+    if (index == 0 || list->head == NULL) {
+        new_node->next = list->head;
+        list->head = new_node;
+    } else {
+        ListNode* current = list->head;
+        for (unsigned int i = 0; i < index - 1 && current->next != NULL; i++) {
+            current = current->next;
+        }
+        new_node->next = current->next;
+        current->next = new_node;
+    }
+    list->size++;
+}
+
+void list_append(IntList list, IntList list_to_append) {
+    if (list == NULL || list_to_append == NULL) return;
+
+    if (list->head == NULL) {
+        list->head = list_to_append->head;
+    } else {
+        ListNode* current = list->head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = list_to_append->head;
+    }
+    list->size += list_to_append->size;
+
+    list_to_append->head = NULL;
+    list_to_append->size = 0;
+}
+
+void list_remove(IntList list, int value) {
+    if (list == NULL || list->head == NULL) return;
+
+    ListNode* current = list->head;
+    ListNode* prev = NULL;
+
+    while (current != NULL) {
+        if (current->value == value) {
+            if (prev == NULL) {
+                list->head = current->next;
+            } else {
+                prev->next = current->next;
+            }
+            list_release_node(current);
+            list->size--;
+            return;
+        }
+        prev = current;
+        current = current->next;
+    }
+}
+
+void list_remove_all(IntList list, int value) {
+    if (list == NULL || list->head == NULL) return;
+
+    ListNode* current = list->head;
+    ListNode* prev = NULL;
+
+    while (current != NULL) {
+        if (current->value == value) {
+            ListNode* to_delete = current;
+            if (prev == NULL) {
+                list->head = current->next;
+            } else {
+                prev->next = current->next;
+            }
+            current = current->next;
+            list_release_node(to_delete);
+            list->size--;
+        } else {
+            prev = current;
+            current = current->next;
+        }
+    }
+}
+
+int list_remove_at(IntList list, unsigned int index) {
+    if (list == NULL || index >= list->size) return 0;
+
+    ListNode* current = list->head;
+    ListNode* prev = NULL;
+
+    for (unsigned int i = 0; i < index; i++) {
+        prev = current;
+        current = current->next;
+    }
+
+    int value = current->value;
+    if (prev == NULL) {
+        list->head = current->next;
+    } else {
+        prev->next = current->next;
+    }
+    list_release_node(current);
+    list->size--;
+    return value;
+}
+
+void list_clear(IntList list) {
+    if (list == NULL) return;
+
+    ListNode* current = list->head;
+    while (current != NULL) {
+        ListNode* to_delete = current;
+        current = current->next;
+        list_release_node(to_delete);
+    }
+    list->head = NULL;
+    list->size = 0;
+}

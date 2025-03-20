@@ -1,0 +1,28 @@
+#ifndef ___SIMPLE_SINGLY_LINKED_LIST__H
+#define ___SIMPLE_SINGLY_LINKED_LIST__H
+
+#include "list.h"
+
+/** 
+ * This header file maps only the common 'list' interface
+ * into naming conventions for simple singly linked list implementation.
+ * 
+ * It does (for now) not extend or alter the function prototypes of the
+ * common interface.
+ *
+ */
+
+/* Define the IntList type as a pointer to the ListData structure */
+typedef struct ListData* IntList;
+
+/* Function prototypes for the singly linked list implementation */
+void list_init(IntList* list);
+void list_clear(IntList list);
+bool list_is_empty(const IntList list);
+int list_get_length(const IntList list);
+bool list_add(IntList list, int value);
+bool list_remove(IntList list, int value);
+bool list_contains(const IntList list, int value);
+void list_dump(const char* prefix, const IntList list);
+
+#endif
